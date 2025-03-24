@@ -14,7 +14,7 @@ const Footer = () => {
               <span className="text-2xl font-bold text-flippa-navy">AccsMarket.</span>
             </a>
             <p className="text-gray-600 text-sm mb-4">
-              The #1 platform to buy and sell online businesses, trusted by over 3 million entrepreneurs.
+              The #1 platform to buy and sell Social Media, trusted by over 3 million entrepreneurs.
             </p>
             <div className="flex space-x-4">
               <a href="#" className="w-8 h-8 flex items-center justify-center bg-gray-100 rounded-full">
