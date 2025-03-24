@@ -1,7 +1,8 @@
 
-// Base API URL - reading from environment variable with fallback
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
-
+// Use the proxy in development, and use the env variable (or fallback) in production
+export const API_BASE_URL = import.meta.env.DEV
+  ? '/api'
+  : import.meta.env.VITE_API_BASE_URL || 'https://aitool.asoroautomotive.com/'
 // Auth endpoints
 export const AUTH_ENDPOINTS = {
   SIGNUP: `${API_BASE_URL}/user-signup`,
