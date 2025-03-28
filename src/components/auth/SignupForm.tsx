@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -15,14 +14,22 @@ const SignupForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [verificationStep, setVerificationStep] = useState(false);
-  const [verificationCode, setVerificationCode] = useState("");
+  const [code, setVerificationCode] = useState("");
   const { toast } = useToast();
   const navigate = useNavigate();
   const { signup, verifyCode, isLoading } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+    function generateRandomString() {
+      const chars =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+      let result = "";
+      for (let i = 0; i < 8; i++) {
+        result += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      return result;
+    }
     if (!verificationStep) {
       // Step 1: Register user
       if (!name || !email || !password || !confirmPassword) {
@@ -33,7 +40,7 @@ const SignupForm = () => {
         });
         return;
       }
-      
+
       if (password !== confirmPassword) {
         toast({
           title: "Error",
@@ -42,9 +49,9 @@ const SignupForm = () => {
         });
         return;
       }
-      
+
       try {
-        await signup(name, email, password);
+        await signup(name, email, password, generateRandomString());
         setVerificationStep(true);
       } catch (error) {
         // Error is already handled in the AuthContext
@@ -52,7 +59,7 @@ const SignupForm = () => {
       }
     } else {
       // Step 2: Verify email with code
-      if (!verificationCode) {
+      if (!code) {
         toast({
           title: "Error",
           description: "Please enter the verification code",
@@ -60,9 +67,9 @@ const SignupForm = () => {
         });
         return;
       }
-      
+
       try {
-        await verifyCode(email, verificationCode);
+        await verifyCode(email, code);
         toast({
           title: "Success",
           description: "Your account has been verified. You can now log in.",
@@ -95,7 +102,7 @@ const SignupForm = () => {
               />
             </div>
           </div>
-          
+
           <div className="space-y-2">
             <div className="relative">
               <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -111,7 +118,7 @@ const SignupForm = () => {
               />
             </div>
           </div>
-          
+
           <div className="space-y-2">
             <div className="relative">
               <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -125,7 +132,7 @@ const SignupForm = () => {
                 className="pl-10"
                 required
               />
-              <div 
+              <div
                 className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"
                 onClick={() => setShowPassword(!showPassword)}
               >
@@ -137,7 +144,7 @@ const SignupForm = () => {
               </div>
             </div>
           </div>
-          
+
           <div className="space-y-2">
             <div className="relative">
               <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -151,7 +158,7 @@ const SignupForm = () => {
                 className="pl-10"
                 required
               />
-              <div 
+              <div
                 className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
               >
@@ -163,7 +170,7 @@ const SignupForm = () => {
               </div>
             </div>
           </div>
-          
+
           <div className="flex items-center">
             <input
               id="terms"
@@ -188,32 +195,28 @@ const SignupForm = () => {
         // Step 2: Verification code
         <div className="space-y-2">
           <p className="text-sm text-gray-600 mb-4">
-            We've sent a verification code to your email. Please enter it below to verify your account.
+            We've sent a verification code to your email. Please enter it below
+            to verify your account.
           </p>
           <Input
             type="text"
             placeholder="Verification Code"
-            value={verificationCode}
+            value={code}
             onChange={(e) => setVerificationCode(e.target.value)}
             className="w-full"
             required
           />
         </div>
       )}
-      
-      <Button
-        type="submit"
-        className="w-full"
-        disabled={isLoading}
-      >
-        {isLoading 
-          ? "Processing..." 
-          : verificationStep 
-            ? "Verify Account" 
-            : "Sign up"
-        }
+
+      <Button type="submit" className="w-full" disabled={isLoading}>
+        {isLoading
+          ? "Processing..."
+          : verificationStep
+          ? "Verify Account"
+          : "Sign up"}
       </Button>
-      
+
       {!verificationStep && (
         <>
           <div className="relative">
@@ -221,10 +224,12 @@ const SignupForm = () => {
               <span className="w-full border-t border-gray-300" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-white px-2 text-gray-500">Or continue with</span>
+              <span className="bg-white px-2 text-gray-500">
+                Or continue with
+              </span>
             </div>
           </div>
-          
+
           <div className="grid grid-cols-2 gap-3">
             <Button variant="outline" type="button" className="w-full">
               Google

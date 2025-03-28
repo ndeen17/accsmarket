@@ -29,7 +29,7 @@ const LoginForm = () => {
     
     try {
       await login(email, password);
-      navigate("/");
+      // navigate("/");
     } catch (error) {
       // Error is already handled in the AuthContext
       console.error("Login error:", error);
