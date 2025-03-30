@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -11,12 +10,14 @@ const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
-  const { login, isLoading } = useAuth();
+  const { login } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
     
     if (!email || !password) {
       toast({
@@ -24,15 +25,30 @@ const LoginForm = () => {
         description: "Please fill in all fields",
         variant: "destructive",
       });
+      setIsLoading(false);
       return;
     }
     
     try {
-      await login(email, password);
-      // navigate("/");
+      const response = await login(email, password);
+      // On successful login, check for backend token/data and navigate accordingly (e.g. to dashboard or wallet)
+      if (response?.token) {
+        toast({
+          title: "Success",
+          description: "Logged in successfully",
+          variant: "success",
+        });
+        navigate("/");
+      }
     } catch (error) {
-      // Error is already handled in the AuthContext
+      toast({
+        title: "Error",
+        description: error.message || "Login failed",
+        variant: "destructive",
+      });
       console.error("Login error:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 

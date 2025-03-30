@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -34,7 +33,14 @@ const WithdrawFundsForm: React.FC<{ currentBalance: number }> = ({ currentBalanc
       });
       return;
     }
-
+    // New: enforce a minimum withdrawal amount of $10
+    if (values.amount < 10) {
+      form.setError('amount', { 
+        type: 'manual', 
+        message: 'Minimum withdrawal amount is $10' 
+      });
+      return;
+    }
     try {
       // In a real app, you would add the user's wallet ID here
       const response = await withdrawFunds({ 

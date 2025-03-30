@@ -1,10 +1,10 @@
-
 import React, { useEffect } from 'react';
 import Hero from '@/components/Hero';
 import FeaturedProducts from '@/components/FeaturedProducts';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { useToast } from '@/components/ui/use-toast';
+import { fetchFeaturedProducts } from '@/services/digitalProductsService'; // Assume this service exists
 
 const HomePage = () => {
   const { toast } = useToast();
@@ -12,16 +12,15 @@ const HomePage = () => {
   useEffect(() => {
     document.title = "Digital Products Marketplace";
     
-    // Show welcome toast on first visit (using localStorage to check)
-    const hasVisitedBefore = localStorage.getItem('hasVisitedBefore');
-    if (!hasVisitedBefore) {
-      toast({
-        title: "Welcome to our marketplace!",
-        description: "Browse our curated collection of premium digital products.",
-        duration: 5000,
-      });
-      localStorage.setItem('hasVisitedBefore', 'true');
+    async function loadFeaturedProducts() {
+      try {
+        const data = await fetchFeaturedProducts(); // Assume this function exists in your productService
+        // Update state or pass data to the FeaturedProducts component
+      } catch (error) {
+        console.error("Failed to load featured products", error);
+      }
     }
+    loadFeaturedProducts();
   }, [toast]);
 
   return (

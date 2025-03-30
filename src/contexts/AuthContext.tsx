@@ -34,7 +34,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const { toast } = useToast();
 
-  // Check if user is already logged in
+  const handleSessionExpiry = () => {
+    toast({
+      title: "Session Expired",
+      description: "Please log in again.",
+      variant: "warning",
+    });
+    logout();
+  };
+
   useEffect(() => {
     const checkAuthStatus = async () => {
       try {
@@ -52,6 +60,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     };
 
     checkAuthStatus();
+
+    const tokenExpiryCheck = setInterval(() => {
+      const token = localStorage.getItem("authToken");
+      if (token && isTokenExpired(token)) {
+        handleSessionExpiry();
+      }
+    }, 60000); // Check every minute
+
+    return () => clearInterval(tokenExpiryCheck);
   }, []);
 
   const signup = async (
@@ -91,26 +108,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     setIsLoading(true);
     try {
       const response = await authService.login({ email, password });
-      console.log(response);
-      if (response.status !== "success") {
-        toast({
-          title: "Error",
-          description: response.message,
-          variant: "destructive",
-        });
-        return;
-      }
-      setUser(response.user);
-      setIsAuthenticated(true);
-      toast({
-        title: "Success",
-        description: "You have successfully logged in",
-      });
+      // Handle setting tokens or user info based on response
       return response;
-    } catch (error: any) {
+    } catch (error) {
       toast({
         title: "Error",
-        description: error.message || "Login failed. Please try again.",
+        description: "Login failed.",
         variant: "destructive",
       });
       throw error;
@@ -209,4 +212,15 @@ export const useAuth = () => {
     throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
+};
+
+const isTokenExpired = (token: string): boolean => {
+  try {
+    const payload = JSON.parse(atob(token.split(".")[1]));
+    const expiry = payload.exp;
+    return Date.now() >= expiry * 1000;
+  } catch (error) {
+    console.error("Failed to parse token:", error);
+    return true;
+  }
 };

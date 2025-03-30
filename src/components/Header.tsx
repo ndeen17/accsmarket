@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Search, User, ChevronDown, Menu, Globe, Flag, X } from 'lucide-react';
@@ -6,9 +5,11 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import SupportTicketButton from './SupportTicketButton';
 import WalletButton from './WalletButton';
+import { useAuth } from "@/contexts/AuthContext";
 
 const Header = () => {
   const [searchQuery, setSearchQuery] = useState('');
+  const { isAuthenticated } = useAuth(); // Check if the user is authenticated
 
   return (
     <header className="w-full bg-white">
@@ -156,7 +157,7 @@ const Header = () => {
             </div>
             
             <div className="hidden md:flex md:items-center md:space-x-4">
-              <WalletButton />
+              {isAuthenticated && <WalletButton />} {/* Show WalletButton only if authenticated */}
               <a href="#" className="text-sm font-medium text-purple-600 hover:text-purple-700 flex items-center">
                 Become a seller
               </a>
@@ -164,7 +165,7 @@ const Header = () => {
             
             {/* Mobile Support Button */}
             <div className="md:hidden flex items-center space-x-2">
-              <WalletButton />
+              {isAuthenticated && <WalletButton />} {/* Show WalletButton only if authenticated */}
               <SupportTicketButton />
             </div>
           </nav>

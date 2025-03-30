@@ -19,17 +19,8 @@ const SignupForm = () => {
   const navigate = useNavigate();
   const { signup, verifyCode, isLoading } = useAuth();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    function generateRandomString() {
-      const chars =
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-      let result = "";
-      for (let i = 0; i < 8; i++) {
-        result += chars.charAt(Math.floor(Math.random() * chars.length));
-      }
-      return result;
-    }
+  const handleSignup = async (event: React.FormEvent) => {
+    event.preventDefault();
     if (!verificationStep) {
       // Step 1: Register user
       if (!name || !email || !password || !confirmPassword) {
@@ -51,10 +42,19 @@ const SignupForm = () => {
       }
 
       try {
-        await signup(name, email, password, generateRandomString());
+        await signup(name, email, password, "");
+        toast({
+          title: "Success",
+          description: "Signup successful. Please verify your email.",
+          variant: "success",
+        });
         setVerificationStep(true);
       } catch (error) {
-        // Error is already handled in the AuthContext
+        toast({
+          title: "Error",
+          description: error.message || "Signup failed",
+          variant: "destructive",
+        });
         console.error("Signup error:", error);
       }
     } else {
@@ -76,14 +76,18 @@ const SignupForm = () => {
         });
         navigate("/login");
       } catch (error) {
-        // Error is already handled in the AuthContext
+        toast({
+          title: "Error",
+          description: error.message || "Verification failed",
+          variant: "destructive",
+        });
         console.error("Verification error:", error);
       }
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSignup} className="space-y-4">
       {!verificationStep ? (
         // Step 1: Registration form
         <>
