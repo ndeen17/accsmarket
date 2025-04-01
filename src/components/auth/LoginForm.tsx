@@ -18,7 +18,7 @@ const LoginForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    
+
     if (!email || !password) {
       toast({
         title: "Error",
@@ -28,17 +28,16 @@ const LoginForm = () => {
       setIsLoading(false);
       return;
     }
-    
+
     try {
       const response = await login(email, password);
-      // On successful login, check for backend token/data and navigate accordingly (e.g. to dashboard or wallet)
       if (response?.token) {
         toast({
           title: "Success",
           description: "Logged in successfully",
           variant: "success",
         });
-        navigate("/");
+        navigate("/user-home"); // Redirect to UserHomePage
       }
     } catch (error) {
       toast({
