@@ -108,7 +108,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     setIsLoading(true);
     try {
       const response = await authService.login({ email, password });
-      // Handle setting tokens or user info based on response
+      if (response?.user && response?.token) {
+        setUser(response.user);
+        setIsAuthenticated(true);
+        localStorage.setItem("authToken", response.token); // Save token for session management
+        toast({
+          title: "Success",
+          description: "Logged in successfully.",
+          variant: "success",
+        });
+      }
       return response;
     } catch (error) {
       toast({
