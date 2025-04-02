@@ -107,22 +107,35 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const login = async (email: string, password: string) => {
     setIsLoading(true);
     try {
-      const response = await authService.login({ email, password });
-      if (response?.user && response?.token) {
-        setUser(response.user);
-        setIsAuthenticated(true);
-        localStorage.setItem("authToken", response.token); // Save token for session management
+      const response = await fetch("https://aitool.asoroautomotive.com/api/user-login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ email, password }),
+      });
+      const data = await response.json();
+      if (data.message !== "Please log in again.") {
+        setUser(data.user);                // set user
+        setIsAuthenticated(true);          // update authentication state
+        localStorage.setItem("authToken", data.token);
         toast({
           title: "Success",
-          description: "Logged in successfully.",
+          description: "Logged in successfully",
           variant: "success",
         });
+        return data;
+      } else {
+        toast({
+          title: "Error",
+          description: data.message,
+          variant: "destructive",
+        });
+        return data;
       }
-      return response;
-    } catch (error) {
+    } catch (error: any) {
       toast({
         title: "Error",
-        description: "Login failed.",
+        description: error.message || "Login failed.",
         variant: "destructive",
       });
       throw error;

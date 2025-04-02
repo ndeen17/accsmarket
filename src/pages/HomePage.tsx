@@ -1,13 +1,11 @@
 import React from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import UserHomePage from "./UserHomePage";
+import GuestHomePage from "./GuestHomePage";
 
-const HomePage = () => {
+const HomePage: React.FC = () => {
   const { isAuthenticated } = useAuth();
-
-  // Redirects after signing in will lead to this route.
-  return isAuthenticated ? <UserHomePage /> : null;
+  return isAuthenticated ? <UserHomePage /> : <GuestHomePage />;
 };
 
 export default HomePage;
-

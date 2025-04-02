@@ -1,23 +1,13 @@
 import React from 'react';
-import { useAuth } from '../contexts/AuthContext';
-import { useToast } from "@/hooks/use-toast";
+import { useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Wallet } from 'lucide-react';
 
 const WalletButton: React.FC = () => {
-  const { isAuthenticated } = useAuth();
-  const { toast } = useToast();
+  const navigate = useNavigate();
 
   const handleWalletAccess = () => {
-    if (!isAuthenticated) {
-      toast({ 
-        title: 'Access Denied', 
-        description: 'Please log in to access the wallet.', 
-        variant: 'destructive' // updated variant
-      });
-      return;
-    }
-    // Redirect to wallet page or perform wallet-related actions
+    navigate("/wallet");
   };
 
   return (
