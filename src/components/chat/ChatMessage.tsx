@@ -1,15 +1,14 @@
-
-import React from 'react';
-import { formatDistanceToNow } from 'date-fns';
-import { FileText, Image } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import React from "react";
+import { formatDistanceToNow } from "date-fns";
+import { FileText, Image } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface ChatMessageProps {
   id: string;
   content: string;
-  sender: 'user' | 'admin';
+  sender: string;
   timestamp: string;
-  seen: boolean;
+  seen: number;
   attachments?: string[];
 }
 
@@ -18,10 +17,10 @@ const ChatMessage: React.FC<ChatMessageProps> = ({
   sender,
   timestamp,
   seen,
-  attachments = []
+  attachments = [],
 }) => {
-  const isUser = sender === 'user';
-  
+  const isUser = sender === "user";
+
   // Determine if content is a URL (for file messages)
   const isUrl = (str: string) => {
     try {
@@ -42,7 +41,7 @@ const ChatMessage: React.FC<ChatMessageProps> = ({
 
   // Check if this is an image URL that should be displayed as an image
   const isImageUrl = (url: string) => {
-    const ext = url.split('.').pop()?.toLowerCase();
+    const ext = url.split(".").pop()?.toLowerCase();
     return ["jpg", "jpeg", "png", "gif", "webp"].includes(ext || "");
   };
 
@@ -61,18 +60,20 @@ const ChatMessage: React.FC<ChatMessageProps> = ({
           title="New message"
         ></div>
       )}
-      
-      {content && !isUrl(content) && <div className="break-words">{content}</div>}
-      
+
+      {content && !isUrl(content) && (
+        <div className="break-words">{content}</div>
+      )}
+
       {attachments && attachments.length > 0 && (
         <div className="mt-2 space-y-2">
           {attachments.map((url, idx) => (
             <div key={idx} className="flex flex-col">
               {isImageUrl(url) ? (
                 <a href={url} target="_blank" rel="noopener noreferrer">
-                  <img 
-                    src={url} 
-                    alt={`Attachment ${idx + 1}`} 
+                  <img
+                    src={url}
+                    alt={`Attachment ${idx + 1}`}
                     className="max-w-full rounded max-h-[200px] object-contain"
                   />
                 </a>
@@ -94,14 +95,16 @@ const ChatMessage: React.FC<ChatMessageProps> = ({
           ))}
         </div>
       )}
-      
+
       <div
         className={cn(
           "text-xs mt-1",
           isUser ? "text-blue-100" : "text-gray-500"
         )}
       >
-        {formatDistanceToNow(new Date(timestamp), { addSuffix: true })}
+        {/* {console.log(timestamp)
+        // formatDistanceToNow(new Date(timestamp), { addSuffix: true })
+        } */}
       </div>
     </div>
   );
