@@ -18,6 +18,7 @@ const ChatPage: React.FC = () => {
   const [isSending, setIsSending] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
   const [ticketSubject, setTicketSubject] = useState("Support Ticket");
+  const [imageSrc, setImageSrc] = useState<string | null>(null);
 
   // Check authentication and load messages
   useEffect(() => {
@@ -71,7 +72,7 @@ const ChatPage: React.FC = () => {
         if (fetchedMessages.length === 0) {
           toast.info("No messages found for this ticket.");
         }
-        // console.log(fetchedMessages);
+        console.log(fetchedMessages);
         setMessages(fetchedMessages);
 
         // Mark unread admin messages as read
@@ -98,6 +99,7 @@ const ChatPage: React.FC = () => {
             ticket_id: ticketId,
           });
           console.log(fetchedMessages);
+          // console.log(fetchedMessages)
           if (fetchedMessages.length === 0) {
             toast.info("No messages found for this ticket.");
           }
@@ -191,7 +193,6 @@ const ChatPage: React.FC = () => {
           />
         )}
       </div>
-
       {/* Input and Send Button */}
       {/* <div className="p-4 border-t flex items-center">
         <input

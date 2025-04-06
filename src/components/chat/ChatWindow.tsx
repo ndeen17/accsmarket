@@ -43,18 +43,24 @@ const ChatWindow: React.FC<ChatWindowProps> = ({
             </div>
           </>
         ) : messages.length > 0 ? (
-          // Messages
-          messages.map((msg) => (
-            <ChatMessage
-              key={msg.id}
-              id={msg.id}
-              content={msg.message}
-              sender={msg.sender_id}
-              timestamp={msg.time_received}
-              seen={msg.seen_by_user}
-              attachments={[]}
-            />
-          ))
+          // Messages sorted by time_received
+          [...messages]
+            .sort(
+              (a, b) =>
+                new Date(a.time_received).getTime() -
+                new Date(b.time_received).getTime()
+            )
+            .map((msg) => (
+              <ChatMessage
+                key={msg.id}
+                id={msg.id}
+                content={msg.message}
+                sender={msg.sender_id}
+                time_received={msg.time_received}
+                seen={msg.seen_by_user}
+                attachments={[]}
+              />
+            ))
         ) : (
           // No messages
           <div className="flex items-center justify-center h-full">
