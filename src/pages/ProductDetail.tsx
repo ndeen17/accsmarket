@@ -392,7 +392,7 @@ const ProductDetail = () => {
                 </div>
 
                 <div className="text-2xl font-bold text-gray-900 mb-4">
-                  {product.price}
+                  ${product.price}
                 </div>
 
                 <div className="prose prose-sm mb-6">
@@ -407,42 +407,66 @@ const ProductDetail = () => {
 
                   <button
                     onClick={handleDownloadClick}
-                    className="w-full py-3 border border-blue-600 text-blue-600 hover:bg-blue-50 rounded-md flex items-center justify-center transition-colors"
+                    disabled={!product || product.stock_quantity <= 0} // Disable if product is empty or stock is 0
+                    className={`w-full py-3 border ${
+                      !product
+                        ? "border-gray-400 text-gray-400 cursor-not-allowed" // Styling for empty product
+                        : product.stock_quantity <= 0
+                        ? "border-red-400 text-red-400 cursor-not-allowed" // Styling for out-of-stock product
+                        : "border-blue-600 text-blue-600 hover:bg-blue-50" // Styling for available product
+                    } rounded-md flex items-center justify-center transition-colors`}
                   >
-                    Purchase
+                    {!product
+                      ? "Product Not Available" // Text for empty product
+                      : product.stock_quantity <= 0
+                      ? "Out of Stock"
+                      : "Purchase"}{" "}
                   </button>
-
                   {/* Show input and button when "Download Sample" is clicked */}
                   {showInput && (
                     <div className="mt-4 space-y-2">
-                      <input
-                        type="number"
-                        value={inputValue}
-                        onChange={(e) => {
-                          const newValue = Number(e.target.value);
+                      <div className="mt-4 space-y-2">
+                        <div className="flex items-center space-x-4">
+                          {/* Decrement Button */}
+                          <button
+                            onClick={() => {
+                              if (inputValue > 1) {
+                                const newValue = inputValue - 1;
+                                setInputValue(newValue);
+                                settotalPriceValue(
+                                  Number(product.price) * newValue
+                                );
+                              }
+                            }}
+                            className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-md"
+                          >
+                            -
+                          </button>
 
-                          if (newValue < 1) {
-                            // Ensure the input value is at least 1
-                            setInputValue(1);
-                            settotalPriceValue(Number(product.price)); // Set total price to the base price
-                          } else if (newValue > product.stock_quantity) {
-                            // Ensure the input value does not exceed the stock quantity
-                            alert("You can't exceed the total stock.");
-                            setInputValue(product.stock_quantity);
-                            settotalPriceValue(
-                              Number(product.price) * product.stock_quantity
-                            ); // Set total price to the maximum stock
-                          } else {
-                            // Update the input value and calculate the total price
-                            setInputValue(newValue);
-                            settotalPriceValue(
-                              Number(product.price) * newValue
-                            );
-                          }
-                        }}
-                        placeholder="Enter a number"
-                        className="w-full py-2 px-4 border rounded-md"
-                      />
+                          {/* Display Current Value */}
+                          <span className="text-lg font-semibold">
+                            {inputValue}
+                          </span>
+
+                          {/* Increment Button */}
+                          <button
+                            onClick={() => {
+                              if (inputValue < product.stock_quantity) {
+                                const newValue = inputValue + 1;
+                                setInputValue(newValue);
+                                settotalPriceValue(
+                                  Number(product.price) * newValue
+                                );
+                              } else {
+                                alert("You can't exceed the total stock.");
+                              }
+                            }}
+                            className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-md"
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
                       <input
                         type="text"
                         value={couponValue}

@@ -36,12 +36,12 @@ const Header = () => {
       <div className="bg-gray-800 text-white py-2">
         <div className="container mx-auto px-4 flex flex-wrap items-center justify-between gap-2">
           <div className="text-sm truncate max-w-[200px] sm:max-w-none">
-            {/* <span>AccsMarket - Social Media Accounts Store</span> */}
+            <span>AccsMarket - Social Media Accounts Store</span>
           </div>
 
           <div className="flex items-center space-x-2 sm:space-x-4">
             <a href="#" className="text-sm flex items-center">
-              {/* <span className="mr-1 hidden sm:inline">@accsmarket</span> */}
+              <span className="mr-1 hidden sm:inline">@accsmarket</span>
             </a>
 
             {/* Show sign up and login buttons only if not authenticated */}
@@ -87,12 +87,14 @@ const Header = () => {
         <div className="container mx-auto px-4 py-3">
           <nav className="flex items-center justify-between">
             <div className="flex items-center">
-              {/* <Link to="/" className="flex items-center text-blue-900 mr-4">
+              <Link to="/" className="flex items-center text-blue-900 mr-4">
                 <span className="text-sm font-medium flex items-center">
-                  <span className="bg-red-600 text-white px-2 py-1 rounded mr-1">ACCS</span>
+                  <span className="bg-red-600 text-white px-2 py-1 rounded mr-1">
+                    ACCS
+                  </span>
                   <span className="hidden sm:inline">market.com</span>
                 </span>
-              </Link> */}
+              </Link>
 
               {/* Mobile menu button */}
               <Sheet>
