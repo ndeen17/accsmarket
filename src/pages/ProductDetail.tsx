@@ -189,7 +189,7 @@ const ProductDetail = () => {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               fromUserId: userId,
-              toUserId: "be1ae81b-f7db-475a-be9f-9ca15415fa76",
+              toUserId: "678f3fa1-8b88-45ef-b945-97b06d0d8f1f",
               amount: Number(discountedPrice),
             }),
           }
@@ -232,7 +232,7 @@ const ProductDetail = () => {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               fromUserId: userId,
-              toUserId: "be1ae81b-f7db-475a-be9f-9ca15415fa76",
+              toUserId: "678f3fa1-8b88-45ef-b945-97b06d0d8f1f",
               amount: totalPriceValue,
             }),
           }
