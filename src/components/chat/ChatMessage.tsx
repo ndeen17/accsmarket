@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+
+import React from "react";
 import { formatDistanceToNow } from "date-fns";
 import { FileText, Image } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -7,50 +8,27 @@ interface ChatMessageProps {
   id: string;
   content: string;
   sender: string;
-  time_received: string;
-  seen: number;
+  timestamp?: string;
+  time_received?: string;
+  seen?: number | boolean;
+  seen_by_user?: number;
   attachments?: string[];
 }
 
 const ChatMessage: React.FC<ChatMessageProps> = ({
-  content = "", // Default to an empty string
+  content = "",
   sender,
+  timestamp,
   time_received,
   seen,
+  seen_by_user,
   attachments = [],
 }) => {
-  const [fetchedImage, setFetchedImage] = useState<string | null>(null);
+  const isUser = sender === 'user';
+  const messageTime = timestamp || time_received;
+  const isMessageSeen = seen !== undefined ? seen : seen_by_user !== undefined ? seen_by_user === 1 : false;
 
-  const isUser = sender !== "admin";
-
-  // Fetch image if content starts with "get/"
-  useEffect(() => {
-    if (content.startsWith("get-image")) {
-      console.log(content);
-      const fetchImage = async (link: string) => {
-        try {
-          const response = await fetch(
-            `https://aitool.asoroautomotive.com/api/${link}`,
-            {
-              method: "GET",
-              credentials: "include",
-            }
-          );
-
-          if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-          }
-          const imageSrc = await response.text();
-          setFetchedImage(imageSrc);
-        } catch (error) {
-          console.error("Error fetching image:", error);
-        }
-      };
-
-      fetchImage(content);
-    }
-  }, [content]);
-
+  // Determine if content is a URL
   const isUrl = (str: string) => {
     try {
       return Boolean(new URL(str));
@@ -59,6 +37,7 @@ const ChatMessage: React.FC<ChatMessageProps> = ({
     }
   };
 
+  // Get file icon based on file extension
   const getFileIcon = (filename: string) => {
     const ext = filename.split(".").pop()?.toLowerCase();
     if (["jpg", "jpeg", "png", "gif", "webp"].includes(ext || "")) {
@@ -75,81 +54,70 @@ const ChatMessage: React.FC<ChatMessageProps> = ({
   return (
     <div
       className={cn(
-        "flex flex-col max-w-[55%] rounded-lg p-3 mb-3 relative",
+        "flex flex-col max-w-[80%] sm:max-w-[70%] rounded-lg p-3 mb-3 relative transition-all",
         isUser
-          ? "ml-auto bg-gray-800 text-white"
-          : "mr-auto bg-gray-100 text-gray-800"
+          ? "ml-auto bg-blue-600 text-white rounded-br-none hover:bg-blue-700"
+          : "mr-auto bg-gray-100 text-gray-800 rounded-bl-none hover:bg-gray-200"
       )}
     >
-      {!seen && !isUser && (
+      {!isMessageSeen && !isUser && (
         <div
-          className="absolute -left-2 top-1 h-2 w-2 rounded-full bg-red-500"
+          className="absolute -left-2 top-1 h-2 w-2 rounded-full bg-red-500 animate-pulse"
           title="New message"
         ></div>
       )}
-
-      {/* Normal text content */}
-      {content &&
-        !content.startsWith("get-image") &&
-        !content.includes("get-image") &&
-        !isUrl(content) && <div className="break-words">{content}</div>}
-      {content &&
-        !content.startsWith("get-image") &&
-        !content.includes("get-image") && <div className="break-words"></div>}
-
-      {/* Dynamically fetched image */}
-      {fetchedImage && (
-        <img
-          src={fetchedImage}
-          alt="Fetched"
-          className="max-w-full rounded max-h-[300px] object-contain mt-2"
-        />
+      
+      {content && !isUrl(content) && (
+        <div className="break-words text-sm sm:text-base">{content}</div>
       )}
-
-      {/* Attachments */}
+      
       {attachments && attachments.length > 0 && (
         <div className="mt-2 space-y-2">
           {attachments.map((url, idx) => (
             <div key={idx} className="flex flex-col">
               {isImageUrl(url) ? (
-                <a href={url} target="_blank" rel="noopener noreferrer">
-                  <img
-                    src={url}
-                    alt={`Attachment ${idx + 1}`}
-                    className="max-w-full rounded max-h-[200px] object-contain"
+                <div className="group relative">
+                  <img 
+                    src={url} 
+                    alt={`Attachment ${idx + 1}`} 
+                    className="max-w-full rounded-md max-h-[200px] object-contain hover:opacity-95 cursor-pointer transition-all"
+                    onClick={() => window.open(url, '_blank')}
                   />
-                </a>
+                  <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all rounded-md flex items-center justify-center">
+                    <span className="opacity-0 group-hover:opacity-100 text-white text-sm">Click to view</span>
+                  </div>
+                </div>
               ) : (
                 <a
                   href={url}
                   target="_blank"
                   rel="noopener noreferrer"
                   className={cn(
-                    "flex items-center text-sm underline",
-                    isUser ? "text-white" : "text-blue-600"
+                    "flex items-center text-sm p-2 rounded-md transition-colors",
+                    isUser 
+                      ? "text-white hover:bg-blue-700" 
+                      : "text-blue-600 hover:bg-gray-200"
                   )}
                 >
                   {getFileIcon(url)}
-                  <span className="ml-1">Attachment {idx + 1}</span>
+                  <span className="ml-2 underline">Attachment {idx + 1}</span>
                 </a>
               )}
             </div>
           ))}
         </div>
       )}
-
-      {/* time_received */}
-      {/* time_received */}
-      <div
-        className={cn(
-          "text-xs mt-1",
-          isUser ? "text-blue-100" : "text-gray-500"
-        )}
-      >
-        {time_received && !isNaN(new Date(time_received).getTime())
-          ? formatDistanceToNow(new Date(time_received), { addSuffix: true })
-          : ""}
-      </div>
+      
+      {messageTime && (
+        <div
+          className={cn(
+            "text-[10px] sm:text-xs mt-2",
+            isUser ? "text-blue-100" : "text-gray-500"
+          )}
+        >
+          {formatDistanceToNow(new Date(messageTime), { addSuffix: true })}
+        </div>
+      )}
     </div>
   );
 };
