@@ -9,7 +9,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 const Header = () => {
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
 
@@ -31,7 +31,7 @@ const Header = () => {
             <a href="#" className="text-sm flex items-center">
               <span className="mr-1 hidden sm:inline">@accountshub</span>
             </a>
-            
+
             {!isAuthenticated && (
               <div className="flex items-center gap-2">
                 <Link to="/signup" className="hidden sm:block">
@@ -72,16 +72,20 @@ const Header = () => {
       {/* Middle navigation - Mobile & Desktop */}
       <div className="border-b border-gray-200">
         <div className="container mx-auto px-4 py-3">
-          <nav className="flex items-center justify-between">
+          <nav
+            className="flex items-center justify-between"
+            style={{ height: "50px" }}
+          >
             <div className="flex items-center">
               <Link to="/" className="flex items-center text-blue-900 mr-4">
-                <img 
-                  src="/lovable-uploads/36d5c32d-c5c1-4a34-9a8f-44c6e9c9fe20.png" 
-                  alt="Accounts Hub Logo" 
-                  className="h-9 w-auto mr-2"
+                <img
+                  src="lovable-uploads\b8bc2363-f8b3-49a4-bec6-1490e3aa106a-removebg-preview.png"
+                  alt="Accounts Hub Logo"
+                  className="w-auto mr-2"
+                  style={{ height: "150px" }}
                 />
               </Link>
-              
+
               <Sheet>
                 <SheetTrigger asChild>
                   <Button variant="ghost" size="icon" className="md:hidden">
@@ -187,7 +191,7 @@ const Header = () => {
                   </div>
                 </SheetContent>
               </Sheet>
-              
+
               <div className="hidden md:flex md:items-center md:space-x-4 lg:space-x-8">
                 <SupportTicketButton />
 
@@ -267,11 +271,14 @@ const Header = () => {
 
             <div className="hidden md:flex md:items-center md:space-x-4">
               {isAuthenticated && <WalletButton />}
-              <a href="#" className="text-sm font-medium text-purple-600 hover:text-purple-700 flex items-center">
+              <a
+                href="#"
+                className="text-sm font-medium text-purple-600 hover:text-purple-700 flex items-center"
+              >
                 Become a seller
               </a>
             </div>
-            
+
             <div className="md:hidden flex items-center space-x-2">
               {isAuthenticated && <WalletButton />}
               <SupportTicketButton />
@@ -279,10 +286,13 @@ const Header = () => {
           </nav>
         </div>
       </div>
-      
+
       <div className="bg-gray-100 py-3">
         <div className="container mx-auto px-4">
-          <form onSubmit={handleSearch} className="flex flex-col sm:flex-row items-center gap-2">
+          <form
+            onSubmit={handleSearch}
+            className="flex flex-col sm:flex-row items-center gap-2"
+          >
             <div className="relative w-full">
               <div className="flex flex-col sm:flex-row w-full gap-2">
                 <div className="relative flex-grow">
@@ -297,7 +307,10 @@ const Header = () => {
                     onChange={(e) => setSearchQuery(e.target.value)}
                   />
                 </div>
-                <Button type="submit" className="bg-green-600 hover:bg-green-700 w-full sm:w-auto">
+                <Button
+                  type="submit"
+                  className="bg-green-600 hover:bg-green-700 w-full sm:w-auto"
+                >
                   Search
                 </Button>
               </div>
@@ -305,15 +318,15 @@ const Header = () => {
           </form>
         </div>
       </div>
-      
-      <div className="bg-blue-50 py-2 text-center text-xs sm:text-sm px-2">
+
+      {/* <div className="bg-blue-50 py-2 text-center text-xs sm:text-sm px-2">
         <span className="text-blue-900">
           Verified social media accounts with full access. Buy securely today!
         </span>
         <a href="#" className="ml-1 text-blue-600 hover:underline font-medium">
           Learn more
         </a>
-      </div>
+      </div> */}
     </header>
   );
 };

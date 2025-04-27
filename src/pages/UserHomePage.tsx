@@ -1,4 +1,3 @@
-
 import React, { useEffect } from "react";
 import Header from "@/components/UserHeader";
 import Footer from "@/components/Footer";
@@ -46,14 +45,15 @@ const UserHomePage = () => {
       <main className="flex-grow">
         <Hero />
         <section className="container mx-auto px-4 py-12">
-          <div className="text-center mb-8">
-            <Button 
+          {/* <section className="container mx-auto px-4 py-12"> */}
+          {/* <div className="text-center mb-8">
+            <Button
               onClick={handleViewAllAccounts}
               className="bg-blue-600 hover:bg-blue-700"
             >
               View All Accounts
             </Button>
-          </div>
+          </div> */}
           <FeaturedProducts />
         </section>
       </main>

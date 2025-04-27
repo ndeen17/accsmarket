@@ -24,7 +24,7 @@ const HomePage: React.FC = () => {
     };
 
     fetchAuthStatus();
-  }, [checkAuthStatus]);
+  }, []);
   
   return status ? <UserHomePage /> : <GuestHomePage />;
 };
