@@ -287,7 +287,7 @@ const Header = () => {
         </div>
       </div>
 
-      <div className="bg-gray-100 py-3">
+      {/* <div className="bg-gray-100 py-3">
         <div className="container mx-auto px-4">
           <form
             onSubmit={handleSearch}
@@ -317,7 +317,7 @@ const Header = () => {
             </div>
           </form>
         </div>
-      </div>
+      </div> */}
 
       {/* <div className="bg-blue-50 py-2 text-center text-xs sm:text-sm px-2">
         <span className="text-blue-900">
