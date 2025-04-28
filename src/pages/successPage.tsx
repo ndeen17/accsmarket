@@ -3,15 +3,32 @@ import { useEffect, useState } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useAuth } from "@/contexts/AuthContext";
+import { authService } from "@/services/authService";
 
 const SuccessPage = () => {
   //   const history = useHistory();
   const location = useLocation();
-  const { checkAuthStatus } = useAuth();
+  //   const { checkAuthStatus } = useAuth();
   const [userId, setUserId] = useState("");
   const transactionId = new URLSearchParams(location.search).get(
     "transactionId"
   ); // Extract transactionId from URL
+
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+
+  const checkAuthStatus = async () => {
+    try {
+      const response = await authService.verifyUser();
+      if (response.message === "Please log in again.") {
+        return response;
+      } else {
+        return response;
+      }
+    } catch (error) {
+      console.error("Authentication error", error);
+      return error;
+    }
+  };
 
   useEffect(() => {
     const fetchAuthStatus = async () => {
