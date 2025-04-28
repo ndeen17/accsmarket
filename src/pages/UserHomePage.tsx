@@ -24,7 +24,7 @@ const UserHomePage = () => {
         }
       } catch (error) {
         console.error("Authentication error", error);
-        return null;
+        return;
       }
     };
 
@@ -48,11 +48,11 @@ const UserHomePage = () => {
   //   fetchAuthStatus();
   // }, []);
 
-  useEffect(() => {
-    if (!status) {
-      navigate("/");
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (!status) {
+  //     navigate("/");
+  //   }
+  // }, []);
 
   const handleViewAllAccounts = () => {
     navigate("/digital-products");
@@ -61,7 +61,7 @@ const UserHomePage = () => {
   return (
     <div className="min-h-screen flex flex-col bg-white">
       <Header />
-      <main className="flex-grow">
+      <main className="flex-grow container mx-auto px-4 py-12">
         <Hero />
         <section className="container mx-auto px-4 py-12">
           {/* <section className="container mx-auto px-4 py-12"> */}

@@ -21,6 +21,7 @@ const Header = () => {
   };
 
   useEffect(() => {
+    console.log(isAuthenticated);
     const checkAuthStatus = async () => {
       try {
         const response = await authService.verifyUser();

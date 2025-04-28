@@ -44,6 +44,30 @@ const UserHeader = () => {
             <a href="#" className="text-sm flex items-center">
               <span className="mr-1 hidden sm:inline">@accountshub</span>
             </a>
+
+            {!isAuthenticated && (
+              <div className="flex items-center gap-2">
+                <Link to="/signup" className="hidden sm:block">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="bg-transparent border-white text-white hover:bg-white/10"
+                  >
+                    <span className="text-sm">+ Sign Up</span>
+                  </Button>
+                </Link>
+
+                <Link to="/login">
+                  <Button
+                    size="sm"
+                    className="bg-blue-600 hover:bg-blue-700 text-white"
+                  >
+                    <span className="text-sm sm:block">Login</span>
+                  </Button>
+                </Link>
+              </div>
+            )}
+
             <div className="flex items-center space-x-2">
               <a href="#" className="flex items-center">
                 <Flag className="h-4 w-4" />
