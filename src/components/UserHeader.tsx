@@ -1,13 +1,35 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Search, ChevronDown, Menu, Globe, Flag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import SupportTicketButton from "./SupportTicketButton";
 import WalletButton from "./WalletButton";
+import { authService } from "@/services/authService";
 
 const UserHeader = () => {
   const [searchQuery, setSearchQuery] = useState("");
+
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+
+  useEffect(() => {
+    const checkAuthStatus = async () => {
+      try {
+        const response = await authService.verifyUser();
+        if (response.message === "Please log in again.") {
+          setIsAuthenticated(false);
+          return null;
+        } else {
+          setIsAuthenticated(true);
+        }
+      } catch (error) {
+        console.error("Authentication error", error);
+        return null;
+      }
+    };
+
+    checkAuthStatus();
+  }, []);
 
   return (
     <header className="w-full bg-white shadow-sm">
@@ -46,7 +68,7 @@ const UserHeader = () => {
             <div className="flex items-center">
               <Link to="/" className="flex items-center text-blue-900 mr-4">
                 <img
-                  src="lovable-uploads\b8bc2363-f8b3-49a4-bec6-1490e3aa106a-removebg-preview.png"
+                  src="/lovable-uploads\b8bc2363-f8b3-49a4-bec6-1490e3aa106a-removebg-preview.png"
                   alt="Accounts Hub Logo"
                   className="w-auto mr-2"
                   style={{ height: "150px" }}

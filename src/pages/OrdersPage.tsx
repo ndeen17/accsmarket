@@ -67,6 +67,11 @@ const OrdersPage: React.FC = () => {
     checkAuthStatus();
   }, []);
 
+  useEffect(() => {
+    // Scroll to the top of the page when the component is mounted
+    window.scrollTo(0, 0);
+  }, []);
+
   const fetchOrders = async (id: string) => {
     try {
       const data = await getOrders(id);

@@ -13,6 +13,7 @@ import { useAuth } from "@/contexts/AuthContext";
 
 import { loadStripe } from "@stripe/stripe-js";
 import { stripVTControlCharacters } from "node:util";
+import { authService } from "@/services/authService";
 
 // outside the component
 const stripePromise = loadStripe(
@@ -99,7 +100,7 @@ const WalletPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [transactionsLoading, setTransactionsLoading] = useState(true);
-  const { checkAuthStatus } = useAuth();
+  // const { checkAuthStatus } = useAuth();
 
   const [paymentMethod, setPaymentMethod] = useState("");
   const [currency, setCurrency] = useState("");
@@ -108,6 +109,22 @@ const WalletPage: React.FC = () => {
   const [userId, setUserId] = useState("");
   const [paymentType, setPaymentType] = useState("normal");
   const [cryptoPrice, setcryptoPrice] = useState("");
+
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+
+  const checkAuthStatus = async () => {
+    try {
+      const response = await authService.verifyUser();
+      if (response.message === "Please log in again.") {
+        return response;
+      } else {
+        return response;
+      }
+    } catch (error) {
+      console.error("Authentication error", error);
+      return error;
+    }
+  };
 
   useEffect(() => {
     const fetchAuthStatus = async () => {
@@ -168,6 +185,11 @@ const WalletPage: React.FC = () => {
     };
 
     fetchAuthStatus();
+  }, []);
+
+  useEffect(() => {
+    // Scroll to the top of the page when the component is mounted
+    window.scrollTo(0, 0);
   }, []);
 
   // inside handleAddFunds

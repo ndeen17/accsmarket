@@ -6,6 +6,7 @@ import FeaturedProducts from "@/components/FeaturedProducts";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { authService } from "@/services/authService";
 
 const UserHomePage = () => {
   const [status, setstatus] = React.useState(false);
@@ -13,21 +14,39 @@ const UserHomePage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchAuthStatus = async () => {
+    const checkAuthStatus = async () => {
       try {
-        const response = await checkAuthStatus();
+        const response = await authService.verifyUser();
         if (response.message === "Please log in again.") {
           setstatus(false);
         } else {
           setstatus(true);
         }
       } catch (error) {
-        console.error("Error in fetching auth status:", error);
+        console.error("Authentication error", error);
+        return null;
       }
     };
 
-    fetchAuthStatus();
+    checkAuthStatus();
   }, []);
+
+  // useEffect(() => {
+  //   const fetchAuthStatus = async () => {
+  //     try {
+  //       const response = await checkAuthStatus();
+  //       if (response.message === "Please log in again.") {
+  //         setstatus(false);
+  //       } else {
+  //         setstatus(true);
+  //       }
+  //     } catch (error) {
+  //       console.error("Error in fetching auth status:", error);
+  //     }
+  //   };
+
+  //   fetchAuthStatus();
+  // }, []);
 
   useEffect(() => {
     if (!status) {

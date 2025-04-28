@@ -79,9 +79,9 @@ const FeaturedProducts = () => {
               {/* Platform Header */}
               <div className="flex items-center justify-between px-4">
                 <h2 className="text-xl font-bold">{platform} Accounts</h2>
-                <span className="text-muted-foreground text-sm">
+                {/* <span className="text-muted-foreground text-sm">
                   {items.length} total
-                </span>
+                </span> */}
               </div>
 
               {/* List of Products */}
@@ -93,7 +93,8 @@ const FeaturedProducts = () => {
                   >
                     {/* Left Image */}
                     <div className="flex items-center gap-4 min-w-0">
-                      <div className="w-16 h-16 rounded-md bg-muted flex items-center justify-center overflow-hidden">
+                      <div className="w-16 h-16 rounded-md flex items-center justify-center overflow-hidden">
+                        {/* <div className="w-16 h-16 rounded-md bg-muted flex items-center justify-center overflow-hidden"> */}
                         <img
                           src={getPlatformImage(
                             product.platform_name.toLocaleLowerCase()

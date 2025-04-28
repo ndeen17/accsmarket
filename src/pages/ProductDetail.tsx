@@ -44,6 +44,11 @@ const ProductDetail = () => {
     setShowInput(true); // Show the input and button when "Download Sample" is clicked
   };
 
+  useEffect(() => {
+    // Scroll to the top of the page when the component is mounted
+    window.scrollTo(0, 0);
+  }, []);
+
   const handleLogInput = () => {
     console.log(inputValue); // Log the entered number
   };
@@ -433,8 +438,8 @@ const ProductDetail = () => {
                       </h2>
 
                       {/* Quantity Control */}
-                      <div className="flex items-center justify-between space-x-4">
-                        <div className="flex items-center space-x-6">
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0 sm:space-x-4">
+                        <div className="flex items-center space-x-6 w-full sm:w-auto">
                           <button
                             onClick={() => {
                               if (inputValue > 1) {
@@ -471,7 +476,7 @@ const ProductDetail = () => {
                         </div>
 
                         {/* Coupon Code Input */}
-                        <div className="w-full sm:w-auto flex flex-col gap-2">
+                        <div className="w-full sm:w-[250px]">
                           <input
                             type="text"
                             value={couponValue}

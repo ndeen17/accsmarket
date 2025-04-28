@@ -7,16 +7,37 @@ import SupportTicketButton from "./SupportTicketButton";
 import WalletButton from "./WalletButton";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { authService } from "@/services/authService";
 
 const Header = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
+  // const { isAuthenticated } = useAuth();
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     navigate(`/digital-products?search=${encodeURIComponent(searchQuery)}`);
   };
+
+  useEffect(() => {
+    const checkAuthStatus = async () => {
+      try {
+        const response = await authService.verifyUser();
+        if (response.message === "Please log in again.") {
+          setIsAuthenticated(false);
+          return null;
+        } else {
+          setIsAuthenticated(true);
+        }
+      } catch (error) {
+        console.error("Authentication error", error);
+        return null;
+      }
+    };
+
+    checkAuthStatus();
+  }, []);
 
   return (
     <header className="w-full bg-white shadow-sm">
@@ -79,7 +100,7 @@ const Header = () => {
             <div className="flex items-center">
               <Link to="/" className="flex items-center text-blue-900 mr-4">
                 <img
-                  src="lovable-uploads\b8bc2363-f8b3-49a4-bec6-1490e3aa106a-removebg-preview.png"
+                  src="/lovable-uploads\b8bc2363-f8b3-49a4-bec6-1490e3aa106a-removebg-preview.png"
                   alt="Accounts Hub Logo"
                   className="w-auto mr-2"
                   style={{ height: "150px" }}

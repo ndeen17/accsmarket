@@ -32,7 +32,7 @@ const Hero = () => {
 
           <button
             onClick={handleViewAllAccounts}
-            className="px-8 py-3 bg-white text-blue-600 font-semibold text-lg rounded-lg shadow-lg hover:bg-gray-100 transition-all"
+            className="px-8 py-3 bg-white mt-8 mb-8 text-blue-600 font-semibold text-lg rounded-lg shadow-lg hover:bg-gray-100 transition-all"
           >
             Explore Our Accounts
           </button>
