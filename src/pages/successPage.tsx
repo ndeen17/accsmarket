@@ -40,6 +40,7 @@ const SuccessPage = () => {
         if (!userDetails) {
           return;
         }
+        verifyPayment(userDetails);
       } catch (error) {
         console.error("Error in fetching auth status:", error);
       }
@@ -48,12 +49,7 @@ const SuccessPage = () => {
     fetchAuthStatus();
   }, []);
 
-  useEffect(() => {
-    // Call verifyPayment when the component mounts or transactionId changes
-    verifyPayment();
-  }, [transactionId]);
-
-  const verifyPayment = async () => {
+  const verifyPayment = async (id: String) => {
     if (
       localStorage.getItem("currentPayment") === "add_to_wallet_with_stripe"
     ) {
@@ -68,7 +64,7 @@ const SuccessPage = () => {
               },
               body: JSON.stringify({
                 amount: Number(amount),
-                userId: userId,
+                userId: id,
               }),
               credentials: "include",
             }
